@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cryzin Voting System</title>
+    <title>Voting Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet"> <!-- Add the same custom font -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,14 +20,14 @@
 
         .header {
             font-family: 'Poppins', sans-serif; /* Stylish modern font */
-            font-size: 3rem; /* Large font size */
+            font-size: 4rem; /* Large font size */
             background: linear-gradient(135deg, #ffffff, #ffb347); /* Contrasting gradient (white to light orange) */
             -webkit-background-clip: text; /* Only show gradient on text */
             color: transparent; /* Makes the gradient visible instead of text color */
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 5px;
-            margin-bottom: 20px; /* Space between header and container */
+            margin-bottom: 20px; /* Space between header and result list */
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         }
 
@@ -41,34 +42,38 @@
             backdrop-filter: blur(5px); /* Adds blur to the background behind the container */
         }
 
-        .candidate-button {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            width: 100%; /* Make buttons stretch to full width */
+        .result-list {
+            list-style: none;
+            padding: 0;
         }
 
-        .candidate-button:hover {
-            background-color: #45a049;
+        .result-list li {
+            background-color: #3c6e8f; /* Matching color for vote result */
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+        }
+
+        .result-list li span {
+            font-weight: bold;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
+    <h1 class="header">Voting Results</h1>
     <div class="container">
-        <h1 class="header">Vote for Your Candidate</h1>
-        <div id="candidates">
+        <ul class="result-list">
             {% for candidate in candidates %}
-                <form action="/submit_vote" method="POST">
-                    <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
-                    <button type="submit" class="candidate-button">Vote for {{ candidate.name }}</button>
-                </form>
+                <li>
+                    <span>{{ candidate.name }}:</span> {{candidate.votes }} votes
+                </li>
             {% endfor %}
-        </div>
+        </ul>
     </div>
 </body>
 </html>
+
+
