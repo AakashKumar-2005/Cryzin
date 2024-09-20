@@ -6,45 +6,67 @@
     <title>Cryzin Voting System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: linear-gradient(135deg, #a8caba, #5c3c8a);
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .header {
-            color: #fff;
-            margin-bottom: 20px;
-        }
-        .input-section {
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            width: 70%;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #3c6e8f;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #2e546b;
-        }
+      body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #a8caba, #5c3c8a); /* Full background gradient */
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Make the body height fill the full viewport */
+    display: flex;
+    flex-direction: column; /* Allows header and container to be stacked */
+    justify-content: center;
+    align-items: center;
+}
+
+.header {
+    font-family: 'Poppins', sans-serif; /* Stylish modern font */
+    font-size: 4rem; /* Large font size */
+    background: linear-gradient(135deg, #ffffff, #ffb347); /* Gradient for text */
+    -webkit-background-clip: text; /* Only show gradient on text */
+    color: transparent; /* Makes the gradient visible instead of text color */
+    text-transform: uppercase; /* Makes the text uppercase */
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-bottom: 20px; /* Adds space between the header and container */
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Optional subtle shadow */
+}
+
+.container {
+    max-width: 600px;
+    width: 100%; /* Allow the container to scale on smaller screens */
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    backdrop-filter: blur(5px); /* Adds a subtle blur to the background behind the container */
+}
+
+.input-section {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 70%;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3c6e8f;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2e546b;
+}
+
+
     </style>
 </head>
 <body>
