@@ -1,7 +1,8 @@
 candidates = {
-    "A",
-    "B",
-    "C",
+    "J Aakash Kumar",
+    "Yamini P",
+    "Samuel Jabez P",
+    "Atthi Sushrutha A",
 }
 
 GENESIS = sorted(candidates)

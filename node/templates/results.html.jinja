@@ -8,10 +8,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #a8caba, #5c3c8a); /* Full background gradient */
+            background: linear-gradient(135deg, #a8caba, #5c3c8a); 
             margin: 0;
             padding: 0;
-            height: 100vh; /* Full viewport height */
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -19,27 +19,27 @@
         }
 
         .header {
-            font-family: 'Poppins', sans-serif; /* Stylish modern font */
-            font-size: 4rem; /* Large font size */
-            background: linear-gradient(135deg, #ffffff, #ffb347); /* Contrasting gradient (white to light orange) */
-            -webkit-background-clip: text; /* Only show gradient on text */
-            color: transparent; /* Makes the gradient visible instead of text color */
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ffffff, #ffb347);
+            -webkit-background-clip: text;
+            color: transparent;
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 5px;
-            margin-bottom: 20px; /* Space between header and result list */
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .container {
             max-width: 600px;
-            width: 100%; /* Responsive scaling */
+            width: 100%; 
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+            background: rgba(255, 255, 255, 0.1); 
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            backdrop-filter: blur(5px); /* Adds blur to the background behind the container */
+            backdrop-filter: blur(5px); 
         }
 
         .result-list {
@@ -48,12 +48,12 @@
         }
 
         .result-list li {
-            background-color: #3c6e8f; /* Matching color for vote result */
+            background-color: #3c6e8f; 
             color: white;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
         }
 
         .result-list li span {
@@ -66,9 +66,9 @@
     <h1 class="header">Voting Results</h1>
     <div class="container">
         <ul class="result-list">
-            {% for candidate in candidates %}
+            {% for candidate in votes %}
                 <li>
-                    <span>{{ candidate.name }}:</span> {{candidate.votes }} votes
+                    <span>{{ candidate }}:</span> {{ votes[candidate] }} votes
                 </li>
             {% endfor %}
         </ul>

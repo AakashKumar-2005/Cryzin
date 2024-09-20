@@ -25,13 +25,15 @@ class Block:
 
     @classmethod
     def genesis(cls):
-        return cls(
+        block = cls(
             lasthash=None,
             timestamp=0,
             difficulty=INITIAL_DIFFICULTY,
-            data=GENESIS,
+            data={"candidates": GENESIS},
             nonce=0,
         )
+        block.hash = cryptohash(str(block))
+        return block
 
     def __str__(self) -> str:
         return (
