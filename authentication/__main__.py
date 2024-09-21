@@ -1,5 +1,7 @@
 from flask import Flask, render_template, jsonify, request
+import face
 import os
+import tempfile
 
 app = Flask(__name__)
 
@@ -13,22 +15,15 @@ def validate(voter):
     if "image" not in request.files:
         return jsonify({"error": "No image uploaded"}), 400
 
-    image = request.files["image"]
-
     file = request.files["image"]
     if file.filename == "":
         return jsonify({"error": "No selected file"}), 400
 
-    if file:
-        filename = os.path.join(UPLOAD_FOLDER, "webcam_capture.jpg")
-        with open(filename, "wb") as f:
-            f.write(file.read())
-            return jsonify({"message": f"Image received for voter {voter}"}), 200
-
-
-@app.route("/")
-def login():
-    return render_template("login.html.jinja")
+    with tempfile.NamedTemporaryFile(delete=False) as temp:
+        file.save(temp.name)
+        res = face.verify(voter, temp.name)
+    os.remove(temp.name)
+    return jsonify(res)
 
 
 if __name__ == "__main__":

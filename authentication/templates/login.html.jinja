@@ -3,62 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webcam Capture and POST (async/await)</title>
+  <title>Authentication</title>
 </head>
 <body>
   <h2>Webcam Capture</h2>
-  <video id="video" width="320" height="240" autoplay></video>
-  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
-  <button id="capture">Capture and Send</button>
+  <form id="upload" enctype="multipart/form-data">
+    <label for="voter">Voter ID:</label>
+    <input type="text" id="voter" name="voter" pattern="[A-Z]{3}[0-9]{7}" required title="Please enter a Voter ID in the format: AAA1234567"/>
+    <br><br>
+    <video id="video" width="320" height="240" autoplay></video>
+    <canvas id="canvas" width="320" height="240" style="display:none"></canvas>
+    <br>
+    <button type="button" id="capture">Capture and Send</button>
+  </form>
 
   <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const captureButton = document.getElementById('capture');
-    const ctx = canvas.getContext('2d');
+    const video = document.getElementById('video')
+    const canvas = document.getElementById('canvas')
+    const captureButton = document.getElementById('capture')
+    const ctx = canvas.getContext('2d')
+    const uploadForm = document.getElementById('upload')
 
     // Access the webcam
     async function setupWebcam() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+        video.srcObject = stream
       } catch (err) {
-        console.error("Error accessing the webcam", err);
-        alert("Failed to access the webcam. Please make sure it's connected and you've granted permission.");
+        console.error("Error accessing the webcam", err)
+        alert("Failed to access the webcam. Please make sure it's connected and you've granted permission.")
       }
     }
 
     // Capture and send image
     async function captureAndUpload() {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      if (!uploadForm.checkValidity()) {
+        uploadForm.reportValidity()
+        return
+      }
+      
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
       try {
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
-        const formData = new FormData();
-        formData.append('image', blob, 'webcam.jpg');
+        const voter = document.getElementById('voter').value
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'))
+        const formData = new FormData()
+        formData.append('image', blob, 'webcam.jpg')
+        formData.append('voter', voter)
 
-        const response = await fetch('/api/validate/1412', {
+        const response = await fetch('/', {
           method: 'POST',
-          body: formData
-        });
+          body: formData,
+        })
 
-        const data = await response.json();
+        const data = await response.json()
 
         if (response.ok) {
-          console.log('Success:', data);
-          alert('Image uploaded successfully!');
+          console.log('Success:', data)
+          alert('Image uploaded successfully!')
         } else {
-          throw new Error(data.error || 'Failed to upload image');
+          throw new Error(data.error || 'Failed to upload image')
         }
       } catch (error) {
-        console.error('Error:', error);
-        alert(`Failed to upload image: ${error.message}`);
+        console.error('Error:', error)
+        alert(`Failed to upload image: ${error.message}`)
       }
     }
 
     // Set up event listeners
-    document.addEventListener('DOMContentLoaded', setupWebcam);
-    captureButton.addEventListener('click', captureAndUpload);
+    document.addEventListener('DOMContentLoaded', setupWebcam)
+    captureButton.addEventListener('click', captureAndUpload)
   </script>
 </body>
 </html>
