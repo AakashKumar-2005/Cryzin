@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, session, jsonify
 from blockchain import Blockchain
 from config import GENESIS
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a secure key
 blockchain = Blockchain()
+
+AUTH_ADDRESS = os.environ.get('AUTH_ADDRESS', 'http://localhost:8000')
 
 DEFAULT_PORT = 3000
 ROOT_NODE_ADDRESS = f"http://localhost:{DEFAULT_PORT}"
@@ -21,14 +24,9 @@ def mine():
     blockchain.add_block(data=data)
     return redirect("/api/blocks")
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    if request.method == 'POST':
-        voter_id = request.form['voter_id']
-        if voter_id:
-            session['voter_id'] = voter_id
-            return redirect(url_for('voting'))
-    return render_template('index.html.jinja')
+    return render_template('index.html.jinja', auth=AUTH_ADDRESS)
 
 @app.route('/voting', methods=['GET'])
 def voting():
@@ -47,4 +45,4 @@ def results():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

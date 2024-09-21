@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{# <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -79,5 +79,163 @@ button:hover {
             </div>
         </form>
     </div>
+</body>
+</html> #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cryzin Voting System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #a8caba, #5c3c8a);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    .header {
+      font-size: 4rem;
+      background: linear-gradient(135deg, #ffffff, #ffb347);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 5px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .input-section {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      width: 70%;
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3c6e8f;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2e546b;
+    }
+
+    .video-section {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="header">Cryzin Voting System</h1>
+   
+    <form id="upload" enctype="multipart/form-data">
+      <div class="input-section">
+        <input type="text" id="voter" name="voter" placeholder="Enter Voter ID" pattern="[A-Z]{3}[0-9]{7}" required />
+        <video id="video" width="320" height="240" autoplay></video>
+        <canvas id="canvas" width="320" height="240" style="display:none"></canvas>
+        <button type="submit" id="capture">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const video = document.getElementById('video')
+    const canvas = document.getElementById('canvas')
+    const captureButton = document.getElementById('capture')
+    const ctx = canvas.getContext('2d')
+    const uploadForm = document.getElementById('upload')
+
+    async function setupWebcam() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+        video.srcObject = stream
+      } catch (err) {
+        console.error("Error accessing the webcam", err)
+        alert("Failed to access the webcam. Please make sure it's connected and you've granted permission.")
+      }
+    }
+
+    // Capture and send image
+    async function captureAndUpload(e) {
+      e.preventDefault();
+      
+      if (!uploadForm.checkValidity()) {
+        uploadForm.reportValidity()
+        return
+      }
+        
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+      try {
+        const voter = document.getElementById('voter').value
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'))
+        const formData = new FormData()
+        formData.append('image', blob, 'webcam.jpg')
+        formData.append('voter', voter)
+
+        const response = await fetch(`{{ auth }}/api/validate/${voter}`, {
+          method: 'POST',
+          body: formData,
+        })
+
+        const data = await response.text()
+
+        if (response.ok) {
+          console.log('Success:', data)
+          alert('Image uploaded successfully!')
+        } else {
+          throw new Error(data.error || 'Failed to upload image')
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        alert(`Failed to upload image: ${error.message}`)
+      }
+    }
+
+        // Set up event listeners
+    document.addEventListener('DOMContentLoaded', setupWebcam)
+    captureButton.addEventListener('click', captureAndUpload)
+  </script>
 </body>
 </html>
